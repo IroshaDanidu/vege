@@ -10,6 +10,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         primaryColor: Colors.green,
+        scaffoldBackgroundColor: Colors.white,
         fontFamily: 'Quicksand',
       ),
       home: ChatPage(),
@@ -22,7 +23,7 @@ class ChatPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Vegetable Categories'),
+        title: Text('Vegetables'),
       ),
       body: VegetableCategories(),
     );
@@ -87,12 +88,39 @@ class VegetableCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
+                      color: Colors.green,
                     ),
                   ),
                   SizedBox(height: 8.0),
                   Text(
                     vegetable.description,
-                    style: TextStyle(fontSize: 16.0),
+                    style: TextStyle(fontSize: 16.0, color: Colors.black87),
+                  ),
+                  SizedBox(height: 16.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          addToCart(vegetable);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.green,
+                        ),
+                        child: Text(
+                          'Add to Cart',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                      Text(
+                        '\Rs .${vegetable.price.toStringAsFixed(2)}',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -101,6 +129,11 @@ class VegetableCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void addToCart(Vegetable vegetable) {
+    print('Added ${vegetable.name} to the cart');
+    // Add your logic for adding to cart
   }
 }
 
@@ -116,10 +149,11 @@ class VegetableDetailPage extends StatelessWidget {
         title: Text(vegetable.name),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            height: 200.0,
+            height: 300.0,
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(vegetable.imagePath),
@@ -127,17 +161,61 @@ class VegetableDetailPage extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 16.0),
           Padding(
             padding: EdgeInsets.all(16.0),
-            child: Text(
-              'Description: ${vegetable.description}',
-              style: TextStyle(fontSize: 18.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  vegetable.name,
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green,
+                  ),
+                ),
+                SizedBox(height: 8.0),
+                Text(
+                  ' ${vegetable.description}',
+                  style: TextStyle(fontSize: 18.0, color: Colors.black87),
+                ),
+                SizedBox(height: 16.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        addToCart(vegetable);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.green,
+                      ),
+                      child: Text(
+                        'Add to Cart',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                    Text(
+                      '\Rs .${vegetable.price.toStringAsFixed(2)}',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  void addToCart(Vegetable vegetable) {
+    print('Added ${vegetable.name} to the cart');
+    // Add your logic for adding to cart
   }
 }
 
@@ -145,11 +223,13 @@ class Vegetable {
   final String name;
   final String description;
   final String imagePath;
+  final double price;
 
   Vegetable({
     required this.name,
     required this.description,
     required this.imagePath,
+    required this.price,
   });
 }
 
@@ -157,67 +237,39 @@ List<Vegetable> vegetableData = [
   Vegetable(
     name: 'Carrot',
     description: 'A crunchy vegetable with a sweet taste.',
-    imagePath: 'assets/carrot.jpg',
+    imagePath: 'assets/carrots.jpg',
+    price: 200,
   ),
   Vegetable(
     name: 'Broccoli',
     description: 'Nutrient-rich green vegetable with a unique taste.',
     imagePath: 'assets/broccoli.jpg',
+    price: 249,
   ),
-  // Add more vegetables as needed
-  Vegetable(
-    name: 'Spinach',
-    description: 'Dark leafy green loaded with vitamins and minerals.',
-    imagePath: 'assets/carrots.jpg',
+    Vegetable(
+    name: 'Tomatoes',
+    description: 'Nutrient-rich red vegetable with a unique taste.',
+    imagePath: 'assets/tomatoes.jpg',
+    price: 350,
   ),
-  Vegetable(
-    name: 'Bell Pepper',
-    description: 'Colorful and crisp vegetable perfect for salads.',
-    imagePath: 'assets/bell_pepper.jpg',
+    Vegetable(
+    name: 'Potatoes',
+    description: 'Versatile vegetable used in various dishes.',
+    imagePath: 'assets/potatoes.jpg',
+    price: 449,
   ),
-  Vegetable(
-    name: 'Tomato',
-    description: 'Juicy red vegetable often used in cooking and salads.',
-    imagePath: 'assets/tomato.jpg',
+    Vegetable(
+    name: 'Cucumbers',
+    description: 'Nutrient-rich green vegetable with a unique taste.',
+    imagePath: 'assets/cucumbers.jpg',
+    price: 309,
   ),
-  Vegetable(
-    name: 'Cucumber',
-    description: 'Cool and refreshing vegetable commonly used in salads.',
-    imagePath: 'assets/cucumber.jpg',
-  ),
-  Vegetable(
-    name: 'Kale',
-    description: 'Superfood with a rich nutrient profile and earthy flavor.',
-    imagePath: 'assets/kale.jpg',
-  ),
-  Vegetable(
-    name: 'Zucchini',
-    description: 'Versatile vegetable often used in savory dishes.',
-    imagePath: 'assets/zucchini.jpg',
-  ),
-  Vegetable(
-    name: 'Eggplant',
-    description: 'Purple vegetable with a meaty texture.',
-    imagePath: 'assets/eggplant.jpg',
-  ),
-  Vegetable(
-    name: 'Sweet Potato',
-    description: 'Nutrient-dense root vegetable with a sweet taste.',
-    imagePath: 'assets/sweet_potato.jpg',
-  ),
-  Vegetable(
-    name: 'Asparagus',
-    description: 'Tender green vegetable with a unique spear-like shape.',
-    imagePath: 'assets/asparagus.jpg',
-  ),
-  Vegetable(
-    name: 'Cauliflower',
-    description: 'Versatile white vegetable often used as a low-carb alternative.',
-    imagePath: 'assets/cauliflower.jpg',
-  ),
-  Vegetable(
-    name: 'Mushroom',
-    description: 'Fungi with a savory taste used in various dishes.',
-    imagePath: 'assets/mushroom.jpg',
-  ),
+  // Add more vegetable data as needed
 ];
+
+void addToCart(Vegetable vegetable) {
+  // Implement your add to cart logic here
+  // You can use a state management solution like Provider or Riverpod
+  // to manage the cart state.
+  print('Added ${vegetable.name} to the cart');
+}

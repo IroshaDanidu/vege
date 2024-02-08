@@ -34,105 +34,111 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
-      appBar: AppBar(
-        title: Text(
-          'IroVegShop',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-            fontFamily: 'Pacifico',
-            color: isDarkMode ? Colors.white : Colors.black,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      home: Scaffold(
+        backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
+        appBar: AppBar(
+          title: Text(
+            'IroVegShop',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+              fontFamily: 'Pacifico',
+              color: isDarkMode ? Colors.white : Colors.black,
+            ),
           ),
+          actions: [
+            IconButton(
+              icon: Icon(isDarkMode ? Icons.wb_sunny : Icons.nightlight_round),
+              onPressed: () {
+                setState(() {
+                  isDarkMode = !isDarkMode;
+                });
+              },
+              color: isDarkMode ? Colors.white : Colors.black,
+            ),
+          ],
+          backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
+          elevation: 2.0,
+          shadowColor: Colors.grey.withOpacity(0.5),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(isDarkMode ? Icons.wb_sunny : Icons.nightlight_round),
-            onPressed: () {
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            color: isDarkMode ? Colors.grey[900] : Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 10,
+                offset: const Offset(0, -3),
+              ),
+            ],
+          ),
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.shifting,
+            selectedItemColor: Colors.green,
+            unselectedItemColor: Colors.grey[600],
+            currentIndex: indexCategory,
+            onTap: (index) {
               setState(() {
-                isDarkMode = !isDarkMode;
+                indexCategory = index;
               });
+              navigateToPage(index);
             },
-            color: isDarkMode ? Colors.white : Colors.black,
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+                backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons
+                    .local_florist), // Change the icon to represent vegetables
+                label: 'Vegetables',
+                backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.shopping_cart),
+                label: 'Cart',
+                backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.account_circle_rounded),
+                label: 'Profile',
+                backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
+              ),
+            ],
           ),
-        ],
-        backgroundColor: Colors.white,
-        elevation: 2.0,
-        shadowColor: Colors.grey.withOpacity(0.5),
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 10,
-              offset: const Offset(0, -3),
-            ),
+        ),
+        body: ListView(
+          children: [
+            const SizedBox(height: 16),
+            header(),
+            const SizedBox(height: 30),
+            title(),
+            const SizedBox(height: 20),
+            search(),
+            const SizedBox(height: 30),
+            categories(),
+            const SizedBox(height: 20),
+            gridFood(),
+            const SizedBox(height: 20),
+            // Example of a Card
+            cardExample(),
+            const SizedBox(height: 20),
+            // Example of a Scrollable List
+            scrollableListExample(),
+            const SizedBox(height: 20),
+            // Example of a Well-designed Mobile Form
+            mobileFormExample(),
+            const SizedBox(height: 20),
+            // Example of another component type (Container)
+            containerExample(),
           ],
         ),
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.shifting,
-          selectedItemColor: Colors.green,
-          unselectedItemColor: Colors.grey[600],
-          currentIndex: indexCategory,
-          onTap: (index) {
-            setState(() {
-              indexCategory = index;
-            });
-            navigateToPage(index);
-          },
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-              backgroundColor: Colors.white,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.local_florist), // Change the icon to represent vegetables
-              label: 'Vegetables',
-              backgroundColor: Colors.white,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart),
-              label: 'Cart',
-              backgroundColor: Colors.white,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_rounded),
-              label: 'Profile',
-              backgroundColor: Colors.white,
-            ),
-          ],
-        ),
-      ),
-      body: ListView(
-        children: [
-          const SizedBox(height: 16),
-          header(),
-          const SizedBox(height: 30),
-          title(),
-          const SizedBox(height: 20),
-          search(),
-          const SizedBox(height: 30),
-          categories(),
-          const SizedBox(height: 20),
-          gridFood(),
-          const SizedBox(height: 20),
-          // Example of a Card
-          cardExample(),
-          const SizedBox(height: 20),
-          // Example of a Scrollable List
-          scrollableListExample(),
-          const SizedBox(height: 20),
-          // Example of a Well-designed Mobile Form
-          mobileFormExample(),
-          const SizedBox(height: 20),
-          // Example of another component type (Container)
-          containerExample(),
-        ],
       ),
     );
   }
@@ -193,13 +199,13 @@ class _HomePageState extends State<HomePage> {
           Text(
             'Hi Irosha Rajapaksha',
             style: TextStyle(
-              color: Colors.green,
-              fontWeight: FontWeight.w500,
-              fontSize: 18,
-            ),
+                color: Colors.green,
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+                fontFamily: 'Raleway'),
           ),
           Text(
-            'Find your Fresh Veggies',
+            'Find Your Fresh Veggies',
             style: TextStyle(
               color: isDarkMode ? Colors.white : Colors.black,
               fontWeight: FontWeight.bold,
@@ -252,7 +258,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget categories() {
-    List list = ['Leafy Greens', 'Root Vegetables', 'Exotic Veggies'];
+    List list = ['Veggies', 'Customized Packs', 'Ready To Cook'];
     return SizedBox(
       height: 40,
       child: ListView.builder(
@@ -397,7 +403,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     child: Text(
-                      'Add to Basket',
+                      'Add to Cart',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -411,288 +417,283 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget cardExample() {
- return Container(
-  margin: const EdgeInsets.all(16),
-  decoration: BoxDecoration(
-    borderRadius: BorderRadius.circular(16),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.5),
-        spreadRadius: 2,
-        blurRadius: 10,
-        offset: const Offset(0, 3),
-      ),
-    ],
-  ),
-  child: ClipRRect(
-    borderRadius: BorderRadius.circular(16),
-    child: Stack(
-      children: [
-        Image.asset(
-          'assets/cucumbers.jpg', // Replace with the actual image asset path
-          width: double.infinity,
-          height: 200,
-          fit: BoxFit.cover,
-        ),
-        Container(
-          color: Colors.black.withOpacity(0.3),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Special Offer!',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Limited-time special offer on fresh vegetables! Grab them before they are gone.',
-                style: TextStyle(fontSize: 16, color: Colors.white),
-              ),
-            ],
+    return Container(
+      margin: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 10,
+            offset: const Offset(0, 3),
           ),
-        ),
-      ],
-    ),
-  ),
-);
- }
-
-Widget scrollableListExample() {
-  // Map to store vegetable names and their respective image paths
-  Map<String, String> vegetableImages = {
-    'Cucumber': 'assets/cucumbers.jpg',
-    'Tomato': 'assets/tomatoes.jpg',
-    'Carrot': 'assets/carrots.jpg',
-    'Broccoli': 'assets/broccoli.jpg',
-    'Bell Pepper': 'assets/bell_pepper.jpg',
-    // Add more entries for other vegetables
-  };
-
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Text(
-          'Mostly Sold Items In IroVegShop',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.green, // Set your preferred text color
-          ),
-        ),
+        ],
       ),
-      SizedBox(
-        height: 200,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: vegetables.length,
-          itemBuilder: (context, index) {
-            String vegetableName = vegetables[index];
-            String imagePath = vegetableImages[vegetableName] ?? 'assets/bell_pepper.jpg';
-
-            return Container(
-              width: 150,
-              margin: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: Offset(0, 2),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Stack(
+          children: [
+            Image.asset(
+              'assets/ofer.jpg', // Replace with the actual image asset path
+              width: double.infinity,
+              height: 200,
+              fit: BoxFit.cover,
+            ),
+            Container(
+              color: Colors.black.withOpacity(0.3),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Special Offer!',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
-                ],
+                  const SizedBox(height: 8),
+                  Text(
+                    'Limited-time special offer on fresh vegetables! Grab them before they are gone.',
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                ], 
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Stack(
-                  children: [
-                    Image.asset(
-                      imagePath,
-                      width: 150,
-                      height: 200,
-                      fit: BoxFit.cover,
-                    ),
-                    Container(
-                      width: 150,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.transparent,
-                            Colors.black.withOpacity(0.7),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 16,
-                      left: 8,
-                      right: 8,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            vegetableName,
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            'Price: \$2.99',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget scrollableListExample() {
+    // Map to store vegetable names and their respective image paths
+    Map<String, String> vegetableImages = {
+      'Cucumber': 'assets/cucumbers.jpg',
+      'Tomato': 'assets/tomatoes.jpg',
+      'Carrot': 'assets/carrots.jpg',
+      'Broccoli': 'assets/broccoli.jpg',
+      'Bell Pepper': 'assets/bell_pepper.jpg',
+      // Add more entries for other vegetables
+    };
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'Mostly Sold Items In IroVegShop',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.green, // Set your preferred text color
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 200,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: vegetables.length,
+            itemBuilder: (context, index) {
+              String vegetableName = vegetables[index];
+              String imagePath =
+                  vegetableImages[vegetableName] ?? 'assets/bell_pepper.jpg';
+
+              return Container(
+                width: 150,
+                margin: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 2),
                     ),
                   ],
                 ),
-              ),
-            );
-          },
-        ),
-      ),
-    ],
-  );
-}
-
-// Example list of vegetables (replace this with your actual data)
-List<String> vegetables = ['Carrot', 'Broccoli', 'Tomato', 'Spinach', 'Cucumber'];
-
-  
-Widget mobileFormExample() {
-  return Container(
-    margin: const EdgeInsets.all(16),
-    padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(16),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.3),
-          spreadRadius: 2,
-          blurRadius: 5,
-          offset: Offset(0, 3),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Stack(
+                    children: [
+                      Image.asset(
+                        imagePath,
+                        width: 150,
+                        height: 200,
+                        fit: BoxFit.cover,
+                      ),
+                      Container(
+                        width: 150,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.7),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 16,
+                        left: 8,
+                        right: 8,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              vegetableName,
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              'Price: \$2.99',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ],
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          'Customer Feedback',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
+    );
+  }
+
+  // Example list of vegetables (replace this with your actual data)
+  List<String> vegetables = [
+    'Carrot',
+    'Broccoli',
+    'Tomato',
+    'Spinach',
+    'Cucumber'
+  ];
+
+  Widget mobileFormExample() {
+    return Container(
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3),
           ),
-        ),
-        const SizedBox(height: 16),
-        TextFormField(
-          style: TextStyle(color: Colors.green),
-          decoration: InputDecoration(
-            labelText: 'Your Name',
-            labelStyle: TextStyle(color: Colors.green),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.green, width: 2.0),
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        TextFormField(
-          keyboardType: TextInputType.emailAddress,
-          style: TextStyle(color: Colors.green),
-          decoration: InputDecoration(
-            labelText: 'Your Email',
-            labelStyle: TextStyle(color: Colors.green),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.green, width: 2.0),
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        TextFormField(
-          obscureText: true,
-          style: TextStyle(color: Colors.green),
-          decoration: InputDecoration(
-            labelText: 'Feedback',
-            labelStyle: TextStyle(color: Colors.green),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.green, width: 2.0),
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.green,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-          onPressed: () {
-            // Add form submission logic here
-          },
-          child: Text(
-            'Submit',
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'Customer Feedback',
             style: TextStyle(
-              fontSize: 18,
-              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
-        ),
-      ],
-    ),
-  );
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: Scaffold(
-      appBar: AppBar(
-        title: Text('Feedback Form'),
-        backgroundColor: Colors.green,
+          const SizedBox(height: 16),
+          TextFormField(
+            style: TextStyle(color: Colors.green),
+            decoration: InputDecoration(
+              labelText: 'Your Name',
+              labelStyle: TextStyle(color: Colors.green),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.green, width: 2.0),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextFormField(
+            keyboardType: TextInputType.emailAddress,
+            style: TextStyle(color: Colors.green),
+            decoration: InputDecoration(
+              labelText: 'Your Email',
+              labelStyle: TextStyle(color: Colors.green),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.green, width: 2.0),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextFormField(
+            obscureText: true,
+            style: TextStyle(color: Colors.green),
+            decoration: InputDecoration(
+              labelText: 'Feedback',
+              labelStyle: TextStyle(color: Colors.green),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.green, width: 2.0),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Colors.green,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onPressed: () {
+              // Add form submission logic here
+            },
+            child: Text(
+              'Submit',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
       ),
-      body: mobileFormExample(),
-    ),
-  ));
-}
+    );
+  }
 
   Widget containerExample() {
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.orange[200],
+        color: Color.fromARGB(255, 10, 172, 67),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.add_reaction_outlined, color: Colors.yellow),
+          Icon(Icons.add_reaction_outlined, color: Color.fromARGB(239, 0, 0, 0)),
           const SizedBox(width: 8),
           Text(
             'Thank You For Choosing Us !',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
+              color: Colors.white, // Set your preferred text color
             ),
           ),
         ],
