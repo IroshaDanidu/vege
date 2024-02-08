@@ -28,9 +28,34 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+
   int indexCategory = 0;
   bool isDarkMode = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
+    );
+
+    // Start the animation when the page is first loaded
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,18 +66,24 @@ class _HomePageState extends State<HomePage> {
       home: Scaffold(
         backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
         appBar: AppBar(
-          title: Text(
-            'IroVegShop',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
-              fontFamily: 'Pacifico',
-              color: isDarkMode ? Colors.white : Colors.black,
+          title: FadeTransition(
+            opacity: _fadeAnimation,
+            child: Text(
+              'IroVegShop',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                fontFamily: 'Pacifico',
+                color: isDarkMode ? Colors.white : Colors.black,
+              ),
             ),
           ),
           actions: [
             IconButton(
-              icon: Icon(isDarkMode ? Icons.wb_sunny : Icons.nightlight_round),
+              icon: FadeTransition(
+                opacity: _fadeAnimation,
+                child: Icon(isDarkMode ? Icons.wb_sunny : Icons.nightlight_round),
+              ),
               onPressed: () {
                 setState(() {
                   isDarkMode = !isDarkMode;
@@ -65,85 +96,36 @@ class _HomePageState extends State<HomePage> {
           elevation: 2.0,
           shadowColor: Colors.grey.withOpacity(0.5),
         ),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            color: isDarkMode ? Colors.grey[900] : Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 2,
-                blurRadius: 10,
-                offset: const Offset(0, -3),
-              ),
+        body: FadeTransition(
+          opacity: _fadeAnimation,
+          child: ListView(
+            children: [
+              const SizedBox(height: 16),
+              header(),
+              const SizedBox(height: 30),
+              title(),
+              const SizedBox(height: 20),
+              search(),
+              const SizedBox(height: 30),
+              categories(),
+              const SizedBox(height: 20),
+              gridFood(),
+              const SizedBox(height: 20),
+              cardExample(),
+              const SizedBox(height: 20),
+              scrollableListExample(),
+              const SizedBox(height: 20),
+              mobileFormExample(),
+              const SizedBox(height: 20),
+              containerExample(),
             ],
           ),
-          child: BottomNavigationBar(
-            type: BottomNavigationBarType.shifting,
-            selectedItemColor: Colors.green,
-            unselectedItemColor: Colors.grey[600],
-            currentIndex: indexCategory,
-            onTap: (index) {
-              setState(() {
-                indexCategory = index;
-              });
-              navigateToPage(index);
-            },
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
-                backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons
-                    .local_florist), // Change the icon to represent vegetables
-                label: 'Vegetables',
-                backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart),
-                label: 'Cart',
-                backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle_rounded),
-                label: 'Profile',
-                backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
-              ),
-            ],
-          ),
-        ),
-        body: ListView(
-          children: [
-            const SizedBox(height: 16),
-            header(),
-            const SizedBox(height: 30),
-            title(),
-            const SizedBox(height: 20),
-            search(),
-            const SizedBox(height: 30),
-            categories(),
-            const SizedBox(height: 20),
-            gridFood(),
-            const SizedBox(height: 20),
-            // Example of a Card
-            cardExample(),
-            const SizedBox(height: 20),
-            // Example of a Scrollable List
-            scrollableListExample(),
-            const SizedBox(height: 20),
-            // Example of a Well-designed Mobile Form
-            mobileFormExample(),
-            const SizedBox(height: 20),
-            // Example of another component type (Container)
-            containerExample(),
-          ],
         ),
       ),
     );
   }
 
-  Widget header() {
+ Widget header() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
@@ -310,11 +292,29 @@ class _HomePageState extends State<HomePage> {
         Food food = dummyFoods[index];
         return GestureDetector(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return DetailPage(food: food);
-            }));
+            // Add scale transition animation
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                transitionDuration: Duration(milliseconds: 500),
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  const double begin = 0.0;
+                  const double end = 1.0;
+                  const Curve curve = Curves.easeInOut;
+
+                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                  var offsetAnimation = animation.drive(tween);
+
+                  return ScaleTransition(
+                    scale: offsetAnimation,
+                    child: DetailPage(food: food),
+                  );
+                },
+              ),
+            );
           },
-          child: Container(
+           child: Container(
             height: 360,
             decoration: BoxDecoration(
               color: isDarkMode ? Colors.grey[800] : Colors.white,
@@ -416,6 +416,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+ 
   Widget cardExample() {
     return Container(
       margin: const EdgeInsets.all(16),
@@ -461,7 +462,7 @@ class _HomePageState extends State<HomePage> {
                     'Limited-time special offer on fresh vegetables! Grab them before they are gone.',
                     style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
-                ], 
+                ],
               ),
             ),
           ],
@@ -580,16 +581,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Example list of vegetables (replace this with your actual data)
   List<String> vegetables = [
     'Carrot',
     'Broccoli',
     'Tomato',
     'Spinach',
-    'Cucumber'
+    'Cucumber',
   ];
 
-  Widget mobileFormExample() {
+ Widget mobileFormExample() {
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
