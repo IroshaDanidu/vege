@@ -595,7 +595,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Example list of vegetables (replace this with your actual data)
   List<String> vegetables = [
     'Carrot',
     'Broccoli',
