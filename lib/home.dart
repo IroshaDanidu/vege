@@ -249,7 +249,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget categories() {
-    List list = ['Veggies', 'Customized Packs', 'Ready To Cook'];
+    List list = ['Veggies', 'Vegetables', 'Cart'];
     return SizedBox(
       height: 40,
       child: ListView.builder(
