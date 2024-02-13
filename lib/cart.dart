@@ -1,27 +1,24 @@
+import 'package:firstapp/home.dart';
+import 'package:flutter/material.dart';
+import 'package:firstapp/chat.dart';
+import 'package:firstapp/profile.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
+import '../model/food.dart';
 
-class MyApp extends StatelessWidget {
+class CartPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Vegetable Shop Cart',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: CartPage(),
-    );
-  }
+  _CartPageState createState() => _CartPageState();
 }
 
-class CartPage extends StatelessWidget {
+class _CartPageState extends State<CartPage> {
+  int indexCategory = 2; // Assuming 'Cart' is at index 2
+  bool isDarkMode = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
       appBar: AppBar(
         title: Text('Shopping Cart'),
       ),
@@ -33,7 +30,9 @@ class CartPage extends StatelessWidget {
             Card(
               elevation: 2,
               child: ListTile(
-                leading: Image.asset('assets/carrots.jpg'), // Replace with your asset path
+                leading: Image.asset(
+                  'assets/carrots.jpg', // Replace with your asset path
+                ),
                 title: Text('Fresh Spinach'),
                 subtitle: Text('Price: \Rs .360'),
                 trailing: IconButton(
@@ -48,7 +47,9 @@ class CartPage extends StatelessWidget {
             Card(
               elevation: 2,
               child: ListTile(
-                leading: Image.asset('assets/cucumbers.jpg'), // Replace with your asset path
+                leading: Image.asset(
+                  'assets/cucumbers.jpg', // Replace with your asset path
+                ),
                 title: Text('Organic Tomatoes'),
                 subtitle: Text('Price: \Rs. 210'),
                 trailing: IconButton(
@@ -63,7 +64,9 @@ class CartPage extends StatelessWidget {
             Card(
               elevation: 2,
               child: ListTile(
-                leading: Image.asset('assets/potatoes.jpg'), // Replace with your asset path
+                leading: Image.asset(
+                  'assets/potatoes.jpg', // Replace with your asset path
+                ),
                 title: Text('Fresh Spinach'),
                 subtitle: Text('Price: \Rs .325'),
                 trailing: IconButton(
@@ -78,7 +81,9 @@ class CartPage extends StatelessWidget {
             Card(
               elevation: 2,
               child: ListTile(
-                leading: Image.asset('assets/tomatoes.jpg'), // Replace with your asset path
+                leading: Image.asset(
+                  'assets/tomatoes.jpg', // Replace with your asset path
+                ),
                 title: Text('Organic Tomatoes'),
                 subtitle: Text('Price: \Rs .252'),
                 trailing: IconButton(
@@ -90,10 +95,13 @@ class CartPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16),
-            
             Text(
               'Total: \Rs .1147',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
+              ),
             ),
             SizedBox(height: 16),
             ElevatedButton(
@@ -109,6 +117,80 @@ class CartPage extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: isDarkMode ? Colors.grey[900] : Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 10,
+              offset: const Offset(0, -3),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.shifting,
+          selectedItemColor: Colors.green,
+          unselectedItemColor: Colors.grey[600],
+          currentIndex: indexCategory,
+          onTap: (index) {
+            navigateToPage(index);
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+              backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.local_florist),
+              label: 'Vegetables',
+              backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart),
+              label: 'Cart',
+              backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle_rounded),
+              label: 'Profile',
+              backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
+            ),
+          ],
+        ),
+      ),
     );
+  }
+
+  void navigateToPage(int index) {
+    setState(() {
+      indexCategory = index;
+    });
+    switch (index) {
+      case 0:
+        // Navigate to Home page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ChatPage()),
+        );
+        break;
+      case 3:
+        // Navigate to Profile page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ProfilePage()),
+        );
+        break;
+      default:
+        break;
+    }
   }
 }

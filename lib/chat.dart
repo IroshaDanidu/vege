@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'cart.dart';
+import 'package:firstapp/profile.dart';
+import 'package:firstapp/home.dart';
+import '../model/food.dart';
+
+bool isDarkMode = false; // Define isDarkMode variable
+int indexCategory = 1; // Define indexCategory variable
 
 void main() {
   runApp(MyApp());
@@ -26,6 +33,37 @@ class ChatPage extends StatelessWidget {
         title: Text('Vegetables'),
       ),
       body: VegetableCategories(),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.shifting,
+        selectedItemColor: Colors.green,
+        unselectedItemColor: Colors.grey[600],
+        currentIndex: indexCategory,
+        onTap: (index) {
+          navigateToPage(index, context); // Pass context to navigateToPage
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+            backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.local_florist),
+            label: 'Vegetables',
+            backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Cart',
+            backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle_rounded),
+            label: 'Profile',
+            backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -53,7 +91,9 @@ class VegetableCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => VegetableDetailPage(vegetable: vegetable)),
+          MaterialPageRoute(
+            builder: (context) => VegetableDetailPage(vegetable: vegetable),
+          ),
         );
       },
       child: Card(
@@ -210,6 +250,29 @@ class VegetableDetailPage extends StatelessWidget {
           ),
         ],
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.local_florist),
+            label: 'Vegetables',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle_rounded),
+            label: 'Profile',
+          ),
+        ],
+        onTap: (index) {
+          navigateToPage(index, context);
+        },
+      ),
     );
   }
 
@@ -246,19 +309,19 @@ List<Vegetable> vegetableData = [
     imagePath: 'assets/broccoli.jpg',
     price: 249,
   ),
-    Vegetable(
+  Vegetable(
     name: 'Tomatoes',
     description: 'Nutrient-rich red vegetable with a unique taste.',
     imagePath: 'assets/tomatoes.jpg',
     price: 350,
   ),
-    Vegetable(
+  Vegetable(
     name: 'Potatoes',
     description: 'Versatile vegetable used in various dishes.',
     imagePath: 'assets/potatoes.jpg',
     price: 449,
   ),
-    Vegetable(
+  Vegetable(
     name: 'Cucumbers',
     description: 'Nutrient-rich green vegetable with a unique taste.',
     imagePath: 'assets/cucumbers.jpg',
@@ -272,4 +335,36 @@ void addToCart(Vegetable vegetable) {
   // You can use a state management solution like Provider or Riverpod
   // to manage the cart state.
   print('Added ${vegetable.name} to the cart');
+}
+
+void navigateToPage(int index, BuildContext context) {
+  switch (index) {
+    case 0:
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+      break;
+    case 1:
+      // Navigate to Vegetables page
+      // Assuming '/' is the route for the home page
+      Navigator.popUntil(context, ModalRoute.withName('/'));
+      break;
+    case 2:
+      // Navigate to Cart page
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CartPage()),
+      );
+      break;
+    case 3:
+      // Navigate to Profile page
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ProfilePage()),
+      );
+      break;
+    default:
+      break;
+  }
 }
