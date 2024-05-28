@@ -450,7 +450,7 @@ class _HomePageState extends State<HomePage> {
         child: Stack(
           children: [
             Image.asset(
-              'assets/ofer.jpg', // Replace with the actual image asset path
+              'assets/ofer.jpg',
               width: double.infinity,
               height: 200,
               fit: BoxFit.cover,
@@ -486,14 +486,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget scrollableListExample() {
-    // Map to store vegetable names and their respective image paths
+    
     Map<String, String> vegetableImages = {
       'Cucumber': 'assets/cucumbers.jpg',
       'Tomato': 'assets/tomatoes.jpg',
       'Carrot': 'assets/carrots.jpg',
       'Broccoli': 'assets/broccoli.jpg',
       'Bell Pepper': 'assets/bell_pepper.jpg',
-      // Add more entries for other vegetables
     };
 
     return Column(
@@ -506,7 +505,7 @@ class _HomePageState extends State<HomePage> {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Colors.green, // Set your preferred text color
+              color: Colors.green, 
             ),
           ),
         ),
@@ -674,7 +673,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             onPressed: () {
-              // Add form submission logic here
             },
             child: Text(
               'Submit',
@@ -708,7 +706,7 @@ class _HomePageState extends State<HomePage> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.white, // Set your preferred text color
+              color: Colors.white, 
             ),
           ),
         ],

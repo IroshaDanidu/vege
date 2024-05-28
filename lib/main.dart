@@ -3,7 +3,6 @@ import 'login.dart';
 import 'signup.dart';
 import 'package:firstapp/home.dart';
 
-
 void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,

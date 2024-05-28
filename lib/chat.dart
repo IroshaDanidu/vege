@@ -39,7 +39,7 @@ class ChatPage extends StatelessWidget {
         unselectedItemColor: Colors.grey[600],
         currentIndex: indexCategory,
         onTap: (index) {
-          navigateToPage(index, context); // Pass context to navigateToPage
+          navigateToPage(index, context); 
         },
         items: [
           BottomNavigationBarItem(
@@ -278,7 +278,6 @@ class VegetableDetailPage extends StatelessWidget {
 
   void addToCart(Vegetable vegetable) {
     print('Added ${vegetable.name} to the cart');
-    // Add your logic for adding to cart
   }
 }
 
@@ -327,13 +326,9 @@ List<Vegetable> vegetableData = [
     imagePath: 'assets/cucumbers.jpg',
     price: 309,
   ),
-  // Add more vegetable data as needed
 ];
 
 void addToCart(Vegetable vegetable) {
-  // Implement your add to cart logic here
-  // You can use a state management solution like Provider or Riverpod
-  // to manage the cart state.
   print('Added ${vegetable.name} to the cart');
 }
 
@@ -347,7 +342,6 @@ void navigateToPage(int index, BuildContext context) {
       break;
     case 1:
       // Navigate to Vegetables page
-      // Assuming '/' is the route for the home page
       Navigator.popUntil(context, ModalRoute.withName('/'));
       break;
     case 2:

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "651942352400",
+    "project_id": "smartfarmer-1c702",
+    "storage_bucket": "smartfarmer-1c702.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:651942352400:android:de3c99bdaf9223cdec5c95",
+        "android_client_info": {
+          "package_name": "com.example.firstapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBrg4W-YRKUYdkRUgXXkIJ6z-17dTHMCs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

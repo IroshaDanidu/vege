@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:firstapp/chat.dart';
 import 'package:firstapp/profile.dart';
 import 'package:flutter/material.dart';
-
 import '../model/food.dart';
 
 class CartPage extends StatefulWidget {
@@ -11,12 +10,15 @@ class CartPage extends StatefulWidget {
   _CartPageState createState() => _CartPageState();
 }
 
+
 class _CartPageState extends State<CartPage> {
-  int indexCategory = 2; // Assuming 'Cart' is at index 2
+  int indexCategory = 2; 
   bool isDarkMode = false;
+  
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
       appBar: AppBar(
@@ -31,14 +33,14 @@ class _CartPageState extends State<CartPage> {
               elevation: 2,
               child: ListTile(
                 leading: Image.asset(
-                  'assets/carrots.jpg', // Replace with your asset path
+                  'assets/carrots.jpg', // //
                 ),
                 title: Text('Fresh Spinach'),
                 subtitle: Text('Price: \Rs .360'),
                 trailing: IconButton(
                   icon: Icon(Icons.remove_circle),
                   onPressed: () {
-                    // Remove item from the cart
+                    //
                   },
                 ),
               ),
@@ -48,14 +50,14 @@ class _CartPageState extends State<CartPage> {
               elevation: 2,
               child: ListTile(
                 leading: Image.asset(
-                  'assets/cucumbers.jpg', // Replace with your asset path
+                  'assets/cucumbers.jpg', // //
                 ),
                 title: Text('Organic Tomatoes'),
                 subtitle: Text('Price: \Rs. 210'),
                 trailing: IconButton(
                   icon: Icon(Icons.remove_circle),
                   onPressed: () {
-                    // Remove item from the cart
+                   
                   },
                 ),
               ),
@@ -65,14 +67,14 @@ class _CartPageState extends State<CartPage> {
               elevation: 2,
               child: ListTile(
                 leading: Image.asset(
-                  'assets/potatoes.jpg', // Replace with your asset path
+                  'assets/potatoes.jpg', // //
                 ),
                 title: Text('Fresh Spinach'),
                 subtitle: Text('Price: \Rs .325'),
                 trailing: IconButton(
                   icon: Icon(Icons.remove_circle),
                   onPressed: () {
-                    // Remove item from the cart
+                    //
                   },
                 ),
               ),
@@ -82,14 +84,14 @@ class _CartPageState extends State<CartPage> {
               elevation: 2,
               child: ListTile(
                 leading: Image.asset(
-                  'assets/tomatoes.jpg', // Replace with your asset path
+                  'assets/tomatoes.jpg', // //
                 ),
                 title: Text('Organic Tomatoes'),
                 subtitle: Text('Price: \Rs .252'),
                 trailing: IconButton(
                   icon: Icon(Icons.remove_circle),
                   onPressed: () {
-                    // Remove item from the cart
+                    //
                   },
                 ),
               ),
