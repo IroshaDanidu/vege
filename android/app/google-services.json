@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "651942352400",
-    "project_id": "smartfarmer-1c702",
-    "storage_bucket": "smartfarmer-1c702.appspot.com"
+    "project_number": "41844942020",
+    "project_id": "vege-shop-eae7e",
+    "storage_bucket": "vege-shop-eae7e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:651942352400:android:de3c99bdaf9223cdec5c95",
+        "mobilesdk_app_id": "1:41844942020:android:0b4e82a5de3d30df301591",
         "android_client_info": {
           "package_name": "com.example.firstapp"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBBrg4W-YRKUYdkRUgXXkIJ6z-17dTHMCs"
+          "current_key": "AIzaSyAHHOuiT5UMa-vs6hg6v6tHyiiTMy8ULMk"
         }
       ],
       "services": {

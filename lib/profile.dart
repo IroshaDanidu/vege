@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firstapp/home.dart';
 import 'package:firstapp/chat.dart';
 import 'package:firstapp/cart.dart';
+import 'package:firstapp/login.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -11,26 +17,124 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   int indexCategory = 3; // Assuming 'Profile' is at index 3
   bool isDarkMode = false;
+  File? _profileImage;
+  String? profileImageUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileImage();
+  }
+
+  Future<void> _loadProfileImage() async {
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    setState(() {
+      profileImageUrl = userDoc['profileImageUrl'];
+    });
+  }
+
+  Future<void> _showImagePickerOptions() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Wrap(
+        children: [
+          ListTile(
+            leading: Icon(Icons.photo_library),
+            title: Text('Choose from Gallery'),
+            onTap: () {
+              _pickImage(ImageSource.gallery);
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.camera_alt),
+            title: Text('Take a Photo'),
+            onTap: () {
+              _pickImage(ImageSource.camera);
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: source);
+
+    if (pickedFile != null) {
+      setState(() {
+        _profileImage = File(pickedFile.path);
+      });
+
+      // Upload to Firebase Storage
+      String fileName = 'profile_${FirebaseAuth.instance.currentUser!.uid}.jpg';
+      Reference storageReference =
+          FirebaseStorage.instance.ref().child('profileimage/$fileName');
+      UploadTask uploadTask = storageReference.putFile(_profileImage!);
+      await uploadTask.whenComplete(() async {
+        String downloadUrl = await storageReference.getDownloadURL();
+        // Save the URL to Firestore
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .update({
+          'profileImageUrl': downloadUrl,
+        });
+        setState(() {
+          profileImageUrl = downloadUrl;
+        });
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
+      backgroundColor: isDarkMode ? Colors.grey[900]! : Colors.white,
       appBar: AppBar(
         title: Text('User Profile'),
       ),
-      body: SingleChildScrollView( // Wrap with SingleChildScrollView
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CircleAvatar(
-                radius: 80,
-                backgroundColor: Colors.green,
-                backgroundImage: AssetImage(
-                    'assets/user_photo.jpg'), // Replace with your user photo
+              GestureDetector(
+                onTap: () {
+                  _showImagePickerOptions();
+                  // go to the path gs://vege-shop-eae7e.appspot.com/profileimage and show its content
+
+                  
+                    String storagePath = 'gs://vege-shop-eae7e.appspot.com/profileimage';
+                    FirebaseStorage.instance.ref(storagePath).listAll().then((result) {
+                      result.items.forEach((Reference ref) {
+                        ref.getDownloadURL().then((url) {
+                          print(url);
+                        });
+                      });
+                    }).catchError((error) {
+                      print(error);
+                    });
+                  
+
+                },
+                // onTap: _showImagePickerOptions,
+                child: CircleAvatar(
+                  radius: 80,
+                  backgroundColor: Colors.green,
+                  backgroundImage: _profileImage != null
+                      ? FileImage(_profileImage!)
+                      : (profileImageUrl != null
+                          ? NetworkImage(profileImageUrl!)
+                          : AssetImage('assets/user_photo.jpg') as ImageProvider),
+                ),
               ),
               SizedBox(height: 16),
               Text(
@@ -94,6 +198,27 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.red,
+                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                ),
+                child: Text(
+                  'Sign Out',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -106,12 +231,12 @@ class _ProfilePageState extends State<ProfilePage> {
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 2,
               blurRadius: 10,
-              offset: const Offset(0, -3),
+              offset: Offset(0, -3),
             ),
           ],
         ),
         child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed, // Change to fixed
+          type: BottomNavigationBarType.fixed,
           selectedItemColor: Colors.green,
           unselectedItemColor: Colors.grey[600],
           currentIndex: indexCategory,
@@ -151,7 +276,6 @@ class _ProfilePageState extends State<ProfilePage> {
     });
     switch (index) {
       case 0:
-        // Navigate to Home page
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => HomePage()),
@@ -164,7 +288,6 @@ class _ProfilePageState extends State<ProfilePage> {
         );
         break;
       case 2:
-        // Navigate to Cart page
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => CartPage()),

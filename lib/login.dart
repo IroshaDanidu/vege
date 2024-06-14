@@ -1,7 +1,18 @@
+import 'package:firstapp/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:firstapp/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  String email_address = "";
+
+  String password = "";
+
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -60,8 +71,55 @@ class LoginPage extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: 40),
                       child: Column(
                         children: <Widget>[
-                          inputFile(label: "Email"),
-                          inputFile(label: "Password", obscureText: true)
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 25.0),
+                            child: TextField(
+                              style: TextStyle(color: Colors.black),
+                              onChanged: (value) {
+                                email_address = value;
+                              },
+                              decoration: InputDecoration(
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.black),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.brown),
+                                  ),
+                                  fillColor: Colors.grey.shade200,
+                                  filled: true,
+                                  hintText: 'Email Address',
+                                  hintStyle:
+                                      TextStyle(color: Colors.grey[500])),
+                            ),
+                          ),
+
+                          const SizedBox(height: 10),
+
+                          // password textfield
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 25.0),
+                            child: TextField(
+                              style: TextStyle(color: Colors.black),
+                              onChanged: (value) {
+                                password = value;
+                              },
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.black),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.brown),
+                                  ),
+                                  fillColor: Colors.grey.shade200,
+                                  filled: true,
+                                  hintText: 'Password',
+                                  hintStyle:
+                                      TextStyle(color: Colors.grey[500])),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -77,13 +135,20 @@ class LoginPage extends StatelessWidget {
                         child: MaterialButton(
                           minWidth: double.infinity,
                           height: 60,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomePage(),
-                              ),
-                            );
+                          onPressed: () async {
+                            try {
+                              final user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email_address, password: password);
+                              if (user != null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomePage(),
+                                  ),
+                                );
+                              }
+                            } catch (e) {
+                              print(e);
+                            }
                           },
                           color: Color.fromARGB(255, 47, 135, 10),
                           elevation: 0,
@@ -105,13 +170,23 @@ class LoginPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text("Don't have an account?"),
-                        Text(
-                          " Sign up",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
+                        GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SignupPage(),
                           ),
-                        )
+                        );
+                      },
+                      child: Text(
+                        " SignUp",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
                       ],
                     ),
                     Container(

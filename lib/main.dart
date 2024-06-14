@@ -1,12 +1,20 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
-import 'login.dart';
+// import 'login.dart';
 import 'signup.dart';
+import 'package:firstapp/login.dart';
 import 'package:firstapp/home.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: HomePage(),
+    home: LoginPage(),
   ));
 }
 
