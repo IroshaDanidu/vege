@@ -4,6 +4,8 @@ import 'package:firstapp/cart.dart';
 import 'package:firstapp/profile.dart';
 import 'package:firstapp/model/food.dart';
 import 'package:firstapp/detail.dart';
+import 'package:firstapp/prices_page.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,6 +33,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int indexCategory = 0;
   bool isDarkMode = false;
+  bool isConnected = true;
+
+  Future<void> checkConnectivity() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    setState(() {
+      isConnected = connectivityResult != ConnectivityResult.none;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,6 +130,8 @@ class _HomePageState extends State<HomePage> {
           categories(),
           const SizedBox(height: 20),
           gridFood(),
+           const SizedBox(height: 20),
+          todayPriceButton(),
           const SizedBox(height: 20),
           cardExample(),
           const SizedBox(height: 20),
@@ -128,10 +140,16 @@ class _HomePageState extends State<HomePage> {
           mobileFormExample(),
           const SizedBox(height: 20),
           containerExample(),
+         
         ],
       ),
     );
   }
+
+
+
+
+
 
   Widget header() {
     return Padding(
@@ -431,6 +449,39 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+
+
+
+  Widget todayPriceButton() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PricesPage()),
+          );
+        },
+        child: Text(
+          'VEGE Information',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: Colors.green,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+      ),
+    );
+  }
+
+
   Widget cardExample() {
     return Container(
       margin: const EdgeInsets.all(16),
@@ -713,6 +764,15 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+
+
+
+
+
+
+
+
 
   void navigateToPage(int index) {
     switch (index) {
