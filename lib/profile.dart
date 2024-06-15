@@ -109,23 +109,18 @@ class _ProfilePageState extends State<ProfilePage> {
               GestureDetector(
                 onTap: () {
                   _showImagePickerOptions();
-                  // go to the path gs://vege-shop-eae7e.appspot.com/profileimage and show its content
-
-                  
-                    String storagePath = 'gs://vege-shop-eae7e.appspot.com/profileimage';
-                    FirebaseStorage.instance.ref(storagePath).listAll().then((result) {
-                      result.items.forEach((Reference ref) {
-                        ref.getDownloadURL().then((url) {
-                          print(url);
-                        });
+                  // Display storage contents
+                  String storagePath = 'gs://vege-shop-eae7e.appspot.com/profileimage';
+                  FirebaseStorage.instance.ref(storagePath).listAll().then((result) {
+                    result.items.forEach((Reference ref) {
+                      ref.getDownloadURL().then((url) {
+                        print(url);
                       });
-                    }).catchError((error) {
-                      print(error);
                     });
-                  
-
+                  }).catchError((error) {
+                    print(error);
+                  });
                 },
-                // onTap: _showImagePickerOptions,
                 child: CircleAvatar(
                   radius: 80,
                   backgroundColor: Colors.green,
