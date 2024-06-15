@@ -17,34 +17,24 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   int indexCategory = 3; // Assuming 'Profile' is at index 3
   bool isDarkMode = false;
-  
-  String? profileImageUrl;
-  final ImagePicker _picker = ImagePicker();
   File? _profileImage;
-
-  Future<void> _loadProfileImage() async {
-    // DocumentSnapshot userDoc = await FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(FirebaseAuth.instance.currentUser!.uid)
-    //     .get();
-    // setState(() {
-    //   profileImageUrl = userDoc['profileImageUrl'];
-    // });
-    var image = await _picker.pickImage(source: ImageSource.gallery);
-
-    _profileImage = File(image!.path);
-    setState(() {
-      
-    });
-  }
+  String? profileImageUrl;
 
   @override
   void initState() {
     super.initState();
-    // _loadProfileImage();
+    _loadProfileImage();
   }
 
-  
+  Future<void> _loadProfileImage() async {
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    setState(() {
+      profileImageUrl = userDoc['profileImageUrl'];
+    });
+  }
 
   Future<void> _showImagePickerOptions() async {
     showModalBottomSheet(
