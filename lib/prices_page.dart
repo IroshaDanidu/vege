@@ -32,8 +32,8 @@ class _PricesPageState extends State<PricesPage> {
   @override
   void initState() {
     super.initState();
-    fetchFruitPrices();
     _checkConnectivity(); // Check connectivity on init
+    fetchFruitPrices();
   }
 
   Future<void> fetchFruitPrices() async {
@@ -46,13 +46,11 @@ class _PricesPageState extends State<PricesPage> {
           isLoading = false;
         });
       } else {
-        // Handle error
         setState(() {
           isLoading = false;
         });
       }
     } catch (e) {
-      // Handle network error
       print('Error fetching fruit prices: $e');
       setState(() {
         isLoading = false;
@@ -76,8 +74,8 @@ class _PricesPageState extends State<PricesPage> {
       setState(() {
         isOffline = result == ConnectivityResult.none;
       });
-      if (isOffline) {
-        // Handle offline state here
+      if (!isOffline) {
+        fetchFruitPrices(); // Re-fetch data when connection is restored
       }
     });
   }
@@ -86,9 +84,9 @@ class _PricesPageState extends State<PricesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('All Fruits Info'),
+        title: Text('All VEGE Info'),
         centerTitle: true,
-        backgroundColor: Colors.green[700], // Adjust as needed
+        backgroundColor: Colors.green[700],
         actions: [
           IconButton(
             icon: Icon(Icons.download_rounded),
@@ -235,7 +233,7 @@ class _PricesPageState extends State<PricesPage> {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.red, // Red color for offline message
+                      color: Colors.red,
                     ),
                   ),
                   SizedBox(height: 16),
@@ -270,12 +268,11 @@ class _PricesPageState extends State<PricesPage> {
       ui.Image image = await boundary.toImage(pixelRatio: 3.0);
       ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
 
-      final directory = await getTemporaryDirectory(); // Use temporary directory
+      final directory = await getTemporaryDirectory();
       String filePath = '${directory.path}/fruits_image.png';
       File file = File(filePath);
-      await file.writeAsBytes(byteData!.buffer.asUint8List()); // Write image to file
+      await file.writeAsBytes(byteData!.buffer.asUint8List());
 
-      // Save image to gallery
       final result = await ImageGallerySaver.saveFile(file.path);
 
       if (result['isSuccess']) {
@@ -406,7 +403,7 @@ class _PricesPageState extends State<PricesPage> {
       SnackBar(
         content: Text(
           'You are offline. Please connect to the internet to perform this action.',
-          style: TextStyle(color: Colors.red), // Red color for offline message
+          style: TextStyle(color: Colors.red),
         ),
       ),
     );
