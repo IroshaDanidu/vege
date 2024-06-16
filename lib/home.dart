@@ -6,6 +6,7 @@ import 'package:firstapp/model/food.dart';
 import 'package:firstapp/detail.dart';
 import 'package:firstapp/prices_page.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(MyApp());
@@ -130,7 +131,7 @@ class _HomePageState extends State<HomePage> {
           categories(),
           const SizedBox(height: 20),
           gridFood(),
-           const SizedBox(height: 20),
+          const SizedBox(height: 20),
           todayPriceButton(),
           const SizedBox(height: 20),
           cardExample(),
@@ -140,15 +141,10 @@ class _HomePageState extends State<HomePage> {
           mobileFormExample(),
           const SizedBox(height: 20),
           containerExample(),
-         
         ],
       ),
     );
   }
-
-
-
-
 
 
   Widget header() {
@@ -325,12 +321,14 @@ class _HomePageState extends State<HomePage> {
                 pageBuilder: (context, animation, secondaryAnimation) {
                   return DetailPage(food: food);
                 },
-                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
                   const begin = Offset(1.0, 0.0);
                   const end = Offset.zero;
                   const curve = Curves.easeInOut;
 
-                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                  var tween = Tween(begin: begin, end: end)
+                      .chain(CurveTween(curve: curve));
                   var offsetAnimation = animation.drive(tween);
 
                   return SlideTransition(
@@ -449,9 +447,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
-
-
   Widget todayPriceButton() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -480,7 +475,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
 
   Widget cardExample() {
     return Container(
@@ -537,7 +531,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget scrollableListExample() {
-    
     Map<String, String> vegetableImages = {
       'Cucumber': 'assets/cucumbers.jpg',
       'Tomato': 'assets/tomatoes.jpg',
@@ -556,7 +549,7 @@ class _HomePageState extends State<HomePage> {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Colors.green, 
+              color: Colors.green,
             ),
           ),
         ),
@@ -723,8 +716,7 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            onPressed: () {
-            },
+            onPressed: () {},
             child: Text(
               'Submit',
               style: TextStyle(
@@ -757,22 +749,13 @@ class _HomePageState extends State<HomePage> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.white, 
+              color: Colors.white,
             ),
           ),
         ],
       ),
     );
   }
-
-
-
-
-
-
-
-
-
 
   void navigateToPage(int index) {
     switch (index) {
@@ -783,12 +766,14 @@ class _HomePageState extends State<HomePage> {
             pageBuilder: (context, animation, secondaryAnimation) {
               return ChatPage();
             },
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
               const begin = Offset(1.0, 0.0);
               const end = Offset.zero;
               const curve = Curves.easeInOut;
 
-              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+              var tween =
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
               var offsetAnimation = animation.drive(tween);
 
               return SlideTransition(
@@ -806,12 +791,14 @@ class _HomePageState extends State<HomePage> {
             pageBuilder: (context, animation, secondaryAnimation) {
               return CartPage();
             },
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
               const begin = Offset(1.0, 0.0);
               const end = Offset.zero;
               const curve = Curves.easeInOut;
 
-              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+              var tween =
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
               var offsetAnimation = animation.drive(tween);
 
               return SlideTransition(
@@ -829,12 +816,14 @@ class _HomePageState extends State<HomePage> {
             pageBuilder: (context, animation, secondaryAnimation) {
               return ProfilePage();
             },
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
               const begin = Offset(1.0, 0.0);
               const end = Offset.zero;
               const curve = Curves.easeInOut;
 
-              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+              var tween =
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
               var offsetAnimation = animation.drive(tween);
 
               return SlideTransition(

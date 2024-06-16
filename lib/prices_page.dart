@@ -11,6 +11,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:connectivity/connectivity.dart';
+import 'package:proximity_sensor/proximity_sensor.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -28,12 +30,15 @@ class _PricesPageState extends State<PricesPage> {
   bool isLoading = true;
   GlobalKey globalKey = GlobalKey();
   bool isOffline = false;
+  bool _isNear = false;
 
   @override
   void initState() {
     super.initState();
     _checkConnectivity(); // Check connectivity on init
     fetchFruitPrices();
+    _listenToProximitySensor();
+    _requestPermissions();
   }
 
   Future<void> fetchFruitPrices() async {
@@ -78,6 +83,24 @@ class _PricesPageState extends State<PricesPage> {
         fetchFruitPrices(); // Re-fetch data when connection is restored
       }
     });
+  }
+
+  Future<void> _listenToProximitySensor() async {
+    ProximitySensor.events.listen((int event) {
+      setState(() {
+        _isNear = event > 0;
+        if (_isNear) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Device is near your face')),
+          );
+        }
+      });
+    });
+  }
+
+  Future<void> _requestPermissions() async {
+    await Permission.storage.request();
+    await Permission.camera.request();
   }
 
   @override
@@ -267,16 +290,11 @@ class _PricesPageState extends State<PricesPage> {
       RenderRepaintBoundary boundary = globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
       ui.Image image = await boundary.toImage(pixelRatio: 3.0);
       ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      Uint8List pngBytes = byteData!.buffer.asUint8List();
 
-      final directory = await getTemporaryDirectory();
-      String filePath = '${directory.path}/fruits_image.png';
-      File file = File(filePath);
-      await file.writeAsBytes(byteData!.buffer.asUint8List());
-
-      final result = await ImageGallerySaver.saveFile(file.path);
-
+      final result = await ImageGallerySaver.saveImage(pngBytes, quality: 100);
       if (result['isSuccess']) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Image saved to gallery')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Image saved successfully!')));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to save image')));
       }
@@ -289,24 +307,25 @@ class _PricesPageState extends State<PricesPage> {
   Future<void> _saveAsPdf() async {
     try {
       final pdf = pw.Document();
-      pdf.addPage(
-        pw.Page(
-          build: (pw.Context context) {
-            return pw.Center(
-              child: pw.Column(
-                mainAxisAlignment: pw.MainAxisAlignment.start,
-                crossAxisAlignment: pw.CrossAxisAlignment.start,
-                children: fruits.map((fruit) => _buildPdfFruitItem(fruit)).toList(),
-              ),
-            );
-          },
-        ),
-      );
 
-      final directory = await getExternalStorageDirectory();
-      final file = File('${directory!.path}/fruits.pdf');
+      fruits.forEach((fruit) {
+        pdf.addPage(
+          pw.Page(
+            build: (pw.Context context) => _buildPdfFruitItem(fruit),
+          ),
+        );
+      });
+
+      final output = await getTemporaryDirectory();
+      final file = File("${output.path}/fruits.pdf");
       await file.writeAsBytes(await pdf.save());
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('PDF saved to ${file.path}')));
+
+      final result = await ImageGallerySaver.saveFile(file.path);
+      if (result['isSuccess']) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('PDF saved successfully!')));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to save PDF')));
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to save PDF')));
       print(e);
